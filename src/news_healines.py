@@ -4,16 +4,16 @@ import re  # Import the regular expressions library
 import pandas as pd
 
 reddit = praw.Reddit(
-    client_id="OrRHVzQoWjcebF3mcuethQ",
-    client_secret="1vw76CcfiiKqYqSHdp7CbBwvn1TBng",
-    user_agent="app-film"
+    client_id="your-reddit-api-creds",
+    client_secret="your-reddit-api-creds",
+    user_agent="your-reddit-api-creds"
 )
 
 def get_news_link(post_id):
     try:
         submission = reddit.submission(id=post_id)
 
-        # Priority 1: Check if the submission URL itself is the news link
+        #Check if the submission URL itself is the news link
         if not submission.is_self:  # Check if it's not a self-post (text post)
             #print(f"Submission URL: FOR POST ID {post_id} : {submission.url}")
             return submission.url
