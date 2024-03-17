@@ -4,9 +4,9 @@ import os
 import time
 
 reddit = praw.Reddit(
-    client_id="OrRHVzQoWjcebF3mcuethQ",
-    client_secret="1vw76CcfiiKqYqSHdp7CbBwvn1TBng",
-    user_agent="app-film"
+    client_id="your-reddit-api-creds",
+    client_secret="your-reddit-api-creds",
+    user_agent="your-reddit-api-creds"
 )
 
 subreddit = reddit.subreddit("technology")
