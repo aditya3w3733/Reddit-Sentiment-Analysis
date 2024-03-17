@@ -15,7 +15,7 @@ reddit = praw.Reddit(
     user_agent="your-credentials"
 )
 
-# Function to fetch article text from URL
+# function to fetch article text from URL
 def fetch_article_text(article_url):
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36'}
     try:
@@ -27,7 +27,7 @@ def fetch_article_text(article_url):
         print(f"Error fetching article: {e}")
         return None
 
-# Function to extract text chunks from HTML content
+# function to extract text chunks from HTML content
 def extract_text_chunks(html_content, chunk_size=4000):
     soup = BeautifulSoup(html_content, 'html.parser')
     text_elements = soup.find_all('p') or soup.find_all('div')
@@ -46,7 +46,7 @@ def extract_text_chunks(html_content, chunk_size=4000):
 
     return chunks
 
-# Function to summarize text using OpenAI's ChatGPT
+# function to summarize text using OpenAI's ChatGPT
 def summarize_with_chatgpt(article_chunks):
     summary_pieces = []
     for chunk in article_chunks:
@@ -57,12 +57,12 @@ def summarize_with_chatgpt(article_chunks):
         )
         summary_piece = response['choices'][0]['message']['content'].strip()
         summary_pieces.append(summary_piece)
-        time.sleep(20)  # Sleep for 20 seconds between OpenAI requests
+        time.sleep(20)  # Sleep for 20 seconds 
 
     full_summary = ". ".join(summary_pieces)
     return full_summary
 
-# Function to summarize text with sentiment analysis
+# Function to summarize comments with sentiment analysis
 def summarize_with_sentiment(post_summary, comments):
     comment_prompts = []
     for comment in comments:
@@ -83,13 +83,13 @@ def summarize_with_sentiment(post_summary, comments):
     return summary
 
 
-# Function to fetch post IDs and news links from the database
+# To fetch post IDs and news links from the database
 def fetch_post_data_from_database():
     conn = mysql.connector.connect(
-        database="reddit_summary",  # Database name updated
+        database="reddit_summary",  
         user="aditya3w3733",
         password="aditya3w3733",
-        host="redditsummarization.c16wsgw4u3b2.ap-south-1.rds.amazonaws.com",
+        host="your-rds-db-instance-endpoint",
         port="3306"
     )
 
@@ -104,7 +104,7 @@ def fetch_post_data_from_database():
 
     return post_data
 
-# Function to fetch comments for a post from the database
+# To fetch comments for a post from the database
 def fetch_comments_from_database(post_id, max_comment_length=500, max_comments=15):
     conn = mysql.connector.connect(
         database="reddit_summary",
@@ -121,7 +121,7 @@ def fetch_comments_from_database(post_id, max_comment_length=500, max_comments=1
 
     truncated_comments = []
     for comment in comments:
-        truncated_comment = comment['comment'][:max_comment_length]  # Truncate comment to maximum length
+        truncated_comment = comment['comment'][:max_comment_length]  
         truncated_comments.append(truncated_comment)
 
     cursor.close()
@@ -132,7 +132,7 @@ def fetch_comments_from_database(post_id, max_comment_length=500, max_comments=1
 
 
 
-# Function to update post summaries in the database
+# update post summaries in the database
 def update_post_summary_in_database(post_id, article_summary, comment_summary):
     conn = mysql.connector.connect(
         database="reddit_summary",
@@ -151,7 +151,6 @@ def update_post_summary_in_database(post_id, article_summary, comment_summary):
     conn.close()
 
 
-# Main logic
 post_data_from_database = fetch_post_data_from_database()
 
 for post_id, news_link in post_data_from_database:
