@@ -1,4 +1,6 @@
-# Reddit Tech Article Summarization & Sentiment Analysis
+# TechDigest
+
+TechDigest extracts the day's top tech stories from Reddit into crisp, digestible summaries, both for articles and their related discussions.
 
 
 Summary for Reddit Post: www.reddit.com/1ba5xpl 
