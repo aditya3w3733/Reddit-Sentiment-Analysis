@@ -1,7 +1,6 @@
 # TechDigest
 
-TechDigest extracts the day's top tech stories from Reddit into crisp, digestible summaries, both for articles and their related discussions.
-
+TechDigest is a python-based application designed to extract, summarize, and present the top technological news articles from Reddit. Utilizing the Reddit API through PRAW alongside OpenAI's GPT-3.5 model, the application provides condensed and digestible summaries of articles and their related discussions, catering to users who want to stay informed without investing a lot of time.
 
 Summary for Reddit Post: www.reddit.com/1ba5xpl 
 
