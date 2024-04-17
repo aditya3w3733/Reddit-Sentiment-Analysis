@@ -1,6 +1,46 @@
 # TechDigest
 
-TechDigest is a python-based application designed to extract, summarize, and present the top technological news articles from Reddit. Utilizing the Reddit API through PRAW alongside OpenAI's GPT-3.5 model, the application provides condensed and digestible summaries of articles and their related discussions, catering to users who want to stay informed without investing a lot of time.
+TechDigest is an automated content aggregation and summarization platform that specifically targets technology-related news from Reddit. It delivers a daily digest of the top technology stories, providing concise summaries of articles and related discussions for tech enthusiasts who want to stay informed without investing a lot of time.
+
+## Architecture
+The system leverages a combination of AWS services, Python libraries, and the OpenAI API to scrape, process, summarize, and serve content.
+
+### Components
+- **AWS Lambda**: Runs the core functionality distributed across three functions:
+  - `Data Collection`: Scrapes the top technology posts from Reddit.
+  - `Data Summarization`: Summarizes the articles and comments.
+  - `API Endpoint`: Serves the summarized content via API Gateway.
+- **AWS RDS (MySQL)**: Stores and manages the scraped and processed data.
+- **Amazon EventBridge**: Schedules the daily scraping and summarization tasks.
+- **OpenAI GPT-3.5 Turbo**: Summarizes the content, capturing the essence of articles and sentimental summary of comments.
+- **AWS S3**: Hosts the front-end website displaying the digested content.
+- **API Gateway**: Provides RESTful API endpoints that interface with Lambda functions.
+
+### Tools and Libraries
+- **PRAW (Python Reddit API Wrapper)**: Enables interaction with the Reddit API for scraping posts and comments.
+- **BeautifulSoup**: Parses HTML content from articles for text extraction.
+- **Requests**: Facilitates HTTP requests to fetch articles.
+
+## Workflow
+1. **Scraping**: Every 24 hours, triggered by Amazon EventBridge, the scraping Lambda function(redditscraper) activates. It uses PRAW to fetch the latest technology posts from Reddit and BeautifulSoup to extract relevant content from the linked articles.
+   
+2. **Summarization**: The extracted content is then passed to another Lambda function(redditsummarization) where GPT-3.5 Turbo is used to generate concise summaries. This step involves cleaning and chunking the text due to token limitations and ensuring that summaries remain relevant and coherent.
+
+3. **Data Management**: Summarized data is stored in an AWS RDS MySQL database, which maintains records of posts, articles, and comment summaries. This allows efficient retrieval and management of content.
+
+4. **API Endpoint**: A Lambda function(getRedditPosts) acts as an API endpoint, interfaced through API Gateway. This function queries the RDS instance and returns the latest summaries in a structured JSON format.
+
+5. **Frontend**: The frontend, hosted on AWS S3, uses JavaScript to call the API endpoint and display the summaries. The site is updated daily to reflect the most recent digests.
+
+6. **Hosting and Deployment**: The entire frontend is statically hosted on S3, providing high availability and scalability. The backend Lambda functions are stateless and serverless, allowing them to handle varying loads effectively.
+
+
+
+
+
+
+
+
 
 Summary for Reddit Post: www.reddit.com/1ba5xpl 
 
