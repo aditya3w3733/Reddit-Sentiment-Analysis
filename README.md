@@ -15,6 +15,7 @@ The system leverages a combination of AWS services, Python libraries, and the Op
 - **OpenAI GPT-3.5 Turbo**: Summarizes the content, capturing the essence of articles and sentimental summary of comments.
 - **AWS S3**: Hosts the front-end website displaying the digested content.
 - **API Gateway**: Provides RESTful API endpoints that interface with Lambda functions.
+- **IAM Roles**: AWS IAM roles and policies are carefully defined to grant minimum necessary permissions to each service.
 
 ### Tools and Libraries
 - **PRAW (Python Reddit API Wrapper)**: Enables interaction with the Reddit API for scraping posts and comments.
@@ -38,7 +39,7 @@ The system leverages a combination of AWS services, Python libraries, and the Op
 
 
 
-
+---
 
 
 
@@ -53,3 +54,10 @@ President Joe Biden has expressed strong support for a House bill that would req
 ### Comment Summary: 
 
 The comments express mixed sentiments towards the post. Some are supportive of the idea of requiring TikTok's Chinese owners to sell the app due to national security concerns, while others have reservations about potential unintended consequences or criticize the US government's actions. Overall, the sentiment is leaning more towards negative or critical viewpoints.
+
+
+---
+## Future Work
+
+- Improvements to the summarization algorithm to better handle the context window limitation of OpenAI's API. 
+- In the future, TechDigest aims to offer users the option to view summaries and digests for specific sub-categories within technology news such as Artificial Intelligence, Machine Learning, Space Exploration, Robotics, and Energy. This feature will enable users to tailor the content feed to their interests, ensuring a personalized experience.
