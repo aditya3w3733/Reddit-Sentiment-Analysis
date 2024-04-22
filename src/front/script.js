@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const apiUrl = 'https://463s3i2zgk.execute-api.ap-south-1.amazonaws.com/test/posts'; 
+    const apiUrl = 'https://your-aws-region/test/posts'; //enter your API Gateways's REST API endpoint here
     const postsContainer = document.querySelector('.posts-container');
 
     function createPostCard(post) {
