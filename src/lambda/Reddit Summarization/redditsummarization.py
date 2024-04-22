@@ -154,7 +154,7 @@ def summarize_with_chatgpt(article_chunks, post_title):
     # compile the individual summaries into one
     combined_summary = " ".join(chunk_summaries)
     
-    final_summary_prompt = f"Based on the following summaries, provide a concise and comprehensive summary for the article without repetition(avoid general introductions like 'This article discusses/explores'):\n\n{combined_summary}"
+    final_summary_prompt = f"Based on the following summaries, provide a concise and comprehensive summary for the article without repetition:\n\n{combined_summary}"
     try:
         final_response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
