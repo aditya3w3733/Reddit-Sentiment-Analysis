@@ -1,0 +1,121 @@
+:root {
+    --bg-dark: #0B0A0A;
+    --text-light: #FBFBFB;
+    --accent-color: #0f62fe; /* Blue */
+    --card-bg: #1e1e1e;
+    --border-default: #333;  /* Default subtle border color */
+    --border-highlight: #0f62fe; /* Blue for hover */
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-light);
+    line-height: 1.6;
+}
+
+.description {
+    font-size: 25px;
+}
+
+.header {
+    text-align: center;
+    padding-left: 1rem;
+}
+
+.header .description {
+    margin-top: 0.5rem;
+}
+
+.posts-container {
+    text-align: left;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem;
+    padding-left: 5rem; 
+}
+
+.card {
+    background-color: var(--bg-dark);
+    border: 1px solid var(--border-default);
+    margin-bottom: 1rem;
+    padding: 1rem;
+    position: relative;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: border 0.3s ease;
+    font-size: 17px;
+}
+
+.card:hover {
+    border: 1px solid var(--border-highlight);
+}
+
+.card .comment-card {
+    background-color: var(--bg-dark);
+    border: 1px solid var(--border-default);
+    padding: 1rem;
+    border-radius: 0.5rem;
+    transition: border 0.3s ease;
+}
+
+.card:hover .comment-card {
+    border: 1px solid var(--border-highlight);
+}
+
+.card .comment-card h3 {
+    color: var(--text-light);
+}
+
+.card .post-date {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 1rem;
+}
+
+.links {
+    text-align: right;
+    padding: 0 1rem;
+    position: relative;
+}
+
+
+.links a {
+    color: var(--text-light);
+    text-decoration: none;
+    border-bottom: 1px dashed transparent;
+    transition: all 0.3s ease;
+}
+
+.links a:hover {
+    border-bottom: 1px dashed var(--text-light);
+}
+
+.card-content {
+    padding: 1rem;
+}
+
+.posts-container {
+    max-width: 1200px; 
+    margin: 0 auto; 
+    padding: 1rem; 
+}
+
+@media (max-width: 600px) {
+    .card {
+        padding: 0.5rem;
+    }
+
+    .card .post-date, .card .links {
+        position: relative;
+        top: auto;
+        right: auto;
+    }
+}
