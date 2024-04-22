@@ -1,0 +1,7 @@
+praw
+pandas
+mysql-connector-python
+requests
+beautifulsoup4
+openai==0.28
+boto3
