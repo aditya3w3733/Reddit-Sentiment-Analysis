@@ -1,10 +1,15 @@
 :root {
-    --bg-dark: #0B0A0A;
+    --bg-dark: rgb(18 28 50);
     --text-light: #FBFBFB;
-    --accent-color: #0f62fe; /* Blue */
+    --accent-color: #0f62fe; /* blue */
     --card-bg: #1e1e1e;
-    --border-default: #333;  /* Default subtle border color */
-    --border-highlight: #0f62fe; /* Blue for hover */
+    --border-default: #455676;  /* default subtle border color */
+    --border-highlight: #455676; 
+    --flair-bg: #263749; /* grey */
+    --flair-active-bg: #7a9fe5; /* active tab blue background */
+    --flair-hover-bg: #2f3439;
+    --flair-text-color: #FBFBFB; /* flair text color */
+
 }
 
 html, body {
@@ -12,21 +17,58 @@ html, body {
     margin: 0;
     padding: 0;
     font-family: Arial, sans-serif;
+    background-color: var(--bg-dark);
+    color: var(--text-light);
+    line-height: 1.5;
 }
+
 
 body {
     background-color: var(--bg-dark);
     color: var(--text-light);
-    line-height: 1.6;
+    line-height: 1.5;
 }
 
+.flair-nav {
+    display: flex;
+    justify-content: center; /* Center flair nav items */
+    padding: 10px 0; /* Padding top and bottom */
+    gap: 10px; /* Space between each flair tab */
+    flex-wrap: wrap; /* Wrap flair tabs to new line on smaller screens */
+}
+
+.flair-nav .flair-tab {
+    cursor: pointer;
+    background-color: var(--flair-bg); /* Default grey background */
+    color: var(--text-light); /* Text color */
+    padding: 8px 16px; /* Padding inside tabs */
+    margin: 0 5px; /* Space between tabs */
+    border-radius: 20px; /* Rounded corners for oval shape */
+    font-size: 1rem;
+    border: none;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+/* Hover state */
+.flair-nav .flair-tab:hover {
+    background-color: var(--flair-hover-bg); 
+    color: var(--text-light); 
+}
+
+/* Active state */
+.flair-nav .flair-tab.active {
+    background-color: var(--flair-active-bg); 
+    color: var(--text-light); 
+}
+
+
 .description {
-    font-size: 25px;
+    font-size: 22px;
 }
 
 .header {
     text-align: center;
-    padding-left: 1rem;
+    padding-left: 2rem;
 }
 
 .header .description {
@@ -39,7 +81,9 @@ body {
     margin: 0 auto;
     padding: 1rem;
     padding-left: 5rem; 
+    margin-top: 20px;
 }
+
 
 .card {
     background-color: var(--bg-dark);
@@ -108,7 +152,34 @@ body {
     padding: 1rem; 
 }
 
+
+/* for larger screens */
+@media (min-width: 768px) {
+    html, body {
+        padding-left: 90px;
+        padding-right: 90px;
+    }
+}
+
+
+/*for mobile devices */
 @media (max-width: 600px) {
+    html, body {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .flair-nav {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .flair-nav .flair-tab {
+        flex: 1 1 auto;
+        margin-bottom: 5px;
+    }
+
     .card {
         padding: 0.5rem;
     }
