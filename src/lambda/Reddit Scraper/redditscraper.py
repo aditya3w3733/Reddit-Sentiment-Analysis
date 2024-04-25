@@ -55,7 +55,8 @@ def fetch_and_store_data(event, context):
     posts_data = []
     comments_data = []
 
-    for submission in subreddit.top("day", limit=8):
+    for submission in subreddit.top("day", limit=15):
+        flair = submission.link_flair_text or 'General'
         comments = [comment for comment in submission.comments.list() if isinstance(comment, praw.models.Comment)]
 
         news_link = get_news_link(submission.id)
@@ -64,6 +65,7 @@ def fetch_and_store_data(event, context):
             "post_id": submission.id,
             "post_title": submission.title,
             "news_link": news_link,
+            "post_flair": flair,
             "post_creation_date": creation_time.strftime('%Y-%m-%d %H:%M:%S'),
         })
 
@@ -91,16 +93,29 @@ def write_to_mysql(posts_df, comments_df, conn):
         cursor = conn.cursor()
 
         for _, row in posts_df.iterrows():
-            cursor.execute("""
-                INSERT INTO posts (post_id, post_title, news_link, post_creation_date)
-                VALUES (%s, %s, %s, %s)
-            """, (row['post_id'], row['post_title'], row['news_link'], row['post_creation_date']))
+            # Check if the post already exists
+            cursor.execute("SELECT post_id FROM posts WHERE post_id = %s", (row['post_id'],))
+            exists = cursor.fetchone()
+            
+            if not exists:
+                cursor.execute("""
+                    INSERT INTO posts (post_id, post_title, news_link, post_flair, post_creation_date)
+                    VALUES (%s, %s, %s, %s, %s)
+                """, (row['post_id'], row['post_title'], row['news_link'], row['post_flair'], row['post_creation_date']))
+            else:
+                print(f"Post {row['post_id']} already exists. Skipping insertion.")
 
         for _, row in comments_df.iterrows():
-            cursor.execute("""
-                INSERT INTO comments (comment_id, post_id, comment)
-                VALUES (%s, %s, %s)
-            """, (row['comment_id'], row['post_id'], row['comment']))
+            cursor.execute("SELECT comment_id FROM comments WHERE comment_id = %s", (row['comment_id'],))
+            exists = cursor.fetchone()
+            
+            if not exists:
+                cursor.execute("""
+                    INSERT INTO comments (comment_id, post_id, comment)
+                    VALUES (%s, %s, %s)
+                """, (row['comment_id'], row['post_id'], row['comment']))
+            else:
+                print(f"Comment {row['comment_id']} already exists. Skipping insertion.")
 
         conn.commit()
         print("Data successfully written to MySQL database.")
@@ -125,3 +140,4 @@ def invoke_summarization():
         print(f"Invoked summarization function: {invoke_response}")
     except Exception as e:
         print(f"Error invoking summarization function: {e}")
+
