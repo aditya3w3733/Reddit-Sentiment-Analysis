@@ -21,6 +21,7 @@ The system leverages a combination of AWS services, Python libraries, and the Op
 - **PRAW (Python Reddit API Wrapper)**: Enables interaction with the Reddit API for scraping posts and comments.
 - **BeautifulSoup**: Parses HTML content from articles for text extraction.
 - **Requests**: Facilitates HTTP requests to fetch articles.
+- **Boto3**: AWS SDK for Python, used for interacting with AWS services programmatically.
 
 ## Workflow
 1. **Scraping**: Every 24 hours, triggered by Amazon EventBridge, the scraping Lambda function(redditscraper) activates. It uses PRAW to fetch the latest technology posts from Reddit and BeautifulSoup to extract relevant content from the linked articles.
@@ -43,21 +44,27 @@ The system leverages a combination of AWS services, Python libraries, and the Op
 
 
 
-Summary for Reddit Post: www.reddit.com/1ba5xpl 
+Original Reddit Post: www.reddit.com/1cbez15
 
-Article Link: https://www.bloomberg.com/news/articles/2024-03-08/biden-backs-measure-forcing-tiktok-sale-as-house-readies-vote
+Article Link: https://techcrunch.com/2024/04/23/tesla-profits-drop-55-company-says-ev-sales-under-pressure-from-hybrids/
+
+Article Title : Tesla profits drop 55%, company says EV sales 'under pressure' from hybrids
 
 ### Article Summary: 
 
-President Joe Biden has expressed strong support for a House bill that would require TikTok's Chinese owners to sell the app. He stated that he would sign the bill if it passes, signaling his commitment to the proposal. This move comes amid ongoing concerns about national security and data privacy issues surrounding Chinese-owned technology companies operating in the United States. Biden made the comments before boarding Air Force One for a campaign event in Pennsylvania.
+Tesla reported a 55% decrease in profits in the first quarter, attributing it to reduced sales of electric vehicles influenced by competition from hybrid vehicles. Despite this setback, the company remains committed to advancing technology through the development of more affordable models and enhancing autonomy using AI. Tesla also experienced growth in energy storage and services, with future plans including the launch of a robotaxi service and a delay in production of the Tesla Semi until late 2025.
 
 ### Comment Summary: 
 
-The comments express mixed sentiments towards the post. Some are supportive of the idea of requiring TikTok's Chinese owners to sell the app due to national security concerns, while others have reservations about potential unintended consequences or criticize the US government's actions. Overall, the sentiment is leaning more towards negative or critical viewpoints.
+The comments overall express a negative sentiment towards Tesla, with criticism directed at Elon Musk, the company's CEO, as well as concerns about the quality of Tesla's products and the company's future prospects. Many commenters feel disillusioned with the brand and question its ability to compete with other car manufacturers in the long run. There is skepticism about Tesla's promises and a sense of disappointment among consumers.
 
+---
+## Recent Updates
 
+- Implemented sub-categories (flairs) to organize content by specific topics within technology news, enhancing user navigation and content discovery.
+  
 ---
 ## Future Work
 
-- Improvements to the summarization algorithm to better handle the context window limitation of OpenAI's API. 
-- In the future, TechDigest aims to offer users the option to view summaries and digests for specific sub-categories within technology news such as Artificial Intelligence, Machine Learning, Space Exploration, Robotics, and Energy. This feature will enable users to tailor the content feed to their interests, ensuring a personalized experience.
+- Improvements to the summarization algorithm to better handle the context window limitation of OpenAI's API.
+  
