@@ -39,12 +39,13 @@ def get_db_connection():
 def delete_previous_posts(conn):
     try:
         with conn.cursor() as cursor:
-            # Check if there are posts to delete
+
+            #if there are posts to delete
             cursor.execute("SELECT COUNT(*) FROM posts")
             if cursor.fetchone()[0] <= 12:
-                return False  # No posts to delete
+                return False  # no posts to delete
             
-            # Multi-statement execution requires enabling multi=True
+            # multi-statement execution
             query = """
                 DELETE c FROM comments c
                 JOIN (SELECT post_id FROM posts ORDER BY post_id ASC LIMIT 6) AS p
@@ -65,7 +66,11 @@ def delete_previous_posts(conn):
 
 def process_summaries(conn):
     posts = fetch_post_data_from_database(conn)
-    for post_id, post_title, news_link in posts:
+    for post_id, post_title, news_link, article_summary, comment_summary in posts:
+
+        if article_summary and comment_summary:
+            print(f"Summaries already exist for Post ID: {post_id}. Skipping summarization.")
+            continue
         article_text = fetch_article_text(news_link)
         if article_text:
             article_chunks = extract_text_chunks(article_text)
@@ -130,22 +135,24 @@ def summarize_with_chatgpt(article_chunks, post_title):
         
         while retries < max_retries:
             try:
-                prompt = f"Summarize this section of the article titled '{post_title}' in a few concise sentences without repetition, ensuring that the context of the entire article is considered:\n\n{chunk}"
+                prompt = f"Summarize this section of the article titled '{post_title}' in a concise sentences without repetition, ensuring that the context of the entire article is considered:\n\n{chunk}"
                 response = openai.ChatCompletion.create(
                     model="gpt-3.5-turbo",
                     messages=[{"role": "user", "content": prompt}]
                 )
                 summary_piece = response['choices'][0]['message']['content'].strip()
                 chunk_summaries.append(summary_piece)
-                time.sleep(25)  
+                time.sleep(45)  
                 break  # break if successful
+
             except openai.error.RateLimitError:
                 retries += 1
                 print("Rate limit exceeded. Waiting 60 seconds before retrying...")
                 time.sleep(60)  # wait for 60 seconds before retrying
+
             except openai.error.OpenAIError as e:
                 print(f"An OpenAI API error occurred: {str(e)}")
-                return None  # Return None if an error occurs
+                return None  # return None if an error occurs
         
         if retries == max_retries:
             print("Max retries reached for chunk summarization. Failed to summarize")
@@ -154,7 +161,7 @@ def summarize_with_chatgpt(article_chunks, post_title):
     # compile the individual summaries into one
     combined_summary = " ".join(chunk_summaries)
     
-    final_summary_prompt = f"Based on the following summaries, provide a concise and comprehensive summary for the article without repetition:\n\n{combined_summary}"
+    final_summary_prompt = f"Based on the following summaries, provide a complete,concise and comprehensive summary for the article without repetition(avoid general introductions like 'This article discusses/explores'):\n\n{combined_summary}"
     try:
         final_response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
@@ -162,6 +169,7 @@ def summarize_with_chatgpt(article_chunks, post_title):
         )
         full_summary = final_response['choices'][0]['message']['content'].strip()
         return full_summary
+        
     except openai.error.OpenAIError as e:
         print(f"Failed to generate final summary: {str(e)}")
         return None
@@ -177,6 +185,7 @@ def summarize_with_sentiment(post_summary, comments):
             messages=[{"role": "user", "content": full_prompt}]
         )
         summary = response['choices'][0]['message']['content'].strip()
+        time.sleep(30)
         return summary
     except openai.error.OpenAIError as e:
         print(f"Failed to summarize comments: {e}")
@@ -185,7 +194,7 @@ def summarize_with_sentiment(post_summary, comments):
 
 def fetch_post_data_from_database(conn):
     with conn.cursor() as cursor:
-        cursor.execute("SELECT post_id, post_title, news_link FROM posts")
+        cursor.execute("SELECT post_id, post_title, news_link, article_summary, comment_summary FROM posts")
         return cursor.fetchall()
 
 
@@ -198,6 +207,5 @@ def fetch_comments_from_database(post_id, conn, max_comments=15):
 
 def update_post_summary_in_database(post_id, article_summary, comment_summary, conn):
     with conn.cursor() as cursor:
-        cursor.execute("UPDATE posts SET article_summary = %s, comment_summary = %s WHERE post_id = %s", (article_summary, comment_summary, post_id))
+        cursor.execute("UPDATE posts SET article_summary = %s, comment_summary = %s WHERE post_id = %s AND (article_summary IS NULL AND comment_summary IS NULL)", (article_summary, comment_summary, post_id))
         conn.commit()
-
