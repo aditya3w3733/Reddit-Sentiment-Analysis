@@ -37,6 +37,9 @@ The system leverages a combination of AWS services, Python libraries, and the Op
 6. **Hosting and Deployment**: The entire frontend is statically hosted on S3, providing high availability and scalability. The backend Lambda functions are stateless and serverless, allowing them to handle varying loads effectively.
 
 
+## System Architecture 
+
+![image](https://github.com/aditya3w3733/TechDigest/assets/104208359/6c25313b-dedb-4675-a03f-f15aa8593ae3)
 
 
 
