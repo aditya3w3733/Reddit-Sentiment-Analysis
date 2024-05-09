@@ -39,7 +39,7 @@ The system leverages a combination of AWS services, Python libraries, and the Op
 
 ## System Architecture 
 
-![image](https://github.com/aditya3w3733/TechDigest/assets/104208359/6c25313b-dedb-4675-a03f-f15aa8593ae3)
+![image](https://github.com/aditya3w3733/TechDigest/assets/104208359/51f40c90-7b0e-4ac8-a336-9b6d86a81256)
 
 
 
