@@ -39,25 +39,36 @@ def get_db_connection():
 def delete_previous_posts(conn):
     try:
         with conn.cursor() as cursor:
-
-            #if there are posts to delete
-            cursor.execute("SELECT COUNT(*) FROM posts")
-            if cursor.fetchone()[0] <= 12:
-                return False  # no posts to delete
+            # check if there are posts older than 24 hours
+            cursor.execute("""
+                SELECT COUNT(*) FROM posts 
+                WHERE post_creation_date < NOW() - INTERVAL 30 HOUR
+            """)
+            old_posts_count = cursor.fetchone()[0]
             
-            # multi-statement execution
-            query = """
+            if old_posts_count == 0:
+                print("No posts older than 24 hours to delete.")
+                return False
+
+            # delete comments for posts older than 24 hours
+            delete_comments_query = """
                 DELETE c FROM comments c
-                JOIN (SELECT post_id FROM posts ORDER BY post_id ASC LIMIT 6) AS p
-                ON c.post_id = p.post_id;
-                DELETE FROM posts
-                ORDER BY post_id ASC
-                LIMIT 6;
+                JOIN posts p ON c.post_id = p.post_id
+                WHERE p.post_creation_date < NOW() - INTERVAL 30 HOUR
             """
-            for result in cursor.execute(query, multi=True):
-                pass
+            cursor.execute(delete_comments_query)
+
+            # delete posts older than 24 hours
+            delete_posts_query = """
+                DELETE FROM posts
+                WHERE post_creation_date < NOW() - INTERVAL 30 HOUR
+            """
+            cursor.execute(delete_posts_query)
+
             conn.commit()
-        return True
+            print(f"Deleted {old_posts_count} posts and their comments older than 24 hours.")
+            return True
+
     except Exception as e:
         print(f"Failed to delete old posts and comments: {e}")
         conn.rollback()
